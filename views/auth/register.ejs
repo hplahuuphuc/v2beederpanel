@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= name %> - Đăng Ký</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold-primary: #d4af37;
+      --gold-light: #f9e29c;
+      --gold-dark: #aa841e;
+      --background: #0a0a0a;
+      --surface: #151515;
+      --border: #3d341d;
+      --text-primary: #ffffff;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text-primary);
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Khung bên trái: Chứa Video */
+    .left-panel {
+      flex: 1.2;
+      position: relative;
+      display: none;
+      background: #000;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .left-panel { display: block; }
+    }
+
+    #side-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      filter: brightness(0.6) contrast(1.1);
+    }
+
+    /* Khung bên phải: Chứa Form */
+    .right-panel {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: var(--surface);
+      border-left: 2px solid var(--gold-dark);
+      box-shadow: -15px 0 35px rgba(0,0,0,0.8);
+      z-index: 10;
+    }
+
+    @media (max-width: 767px) {
+      .right-panel { max-width: 100%; border-left: none; }
+    }
+
+    .fade-in { opacity: 0; transform: translateY(20px); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary), var(--gold-light), var(--gold-dark));
+      background-size: 300% 300%;
+      color: #000;
+      font-weight: 700;
+      transition: all 0.4s ease;
+      animation: goldFlow 6s ease infinite;
+      border: none;
+    }
+
+    @keyframes goldFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+      filter: brightness(1.1);
+    }
+
+    .form-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      color: white;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+      outline: none;
+    }
+
+    .gold-text {
+      background: linear-gradient(to right, #f9e29c, #d4af37, #aa841e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="split-container">
+    <div class="left-panel">
+      <video id="side-video" autoplay muted loop playsinline>
+        <source src="https://image2url.com/r2/default/videos/1771388958449-9d3f66af-5e09-4f01-bdca-2ef422cc96a8.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[var(--surface)]"></div>
+    </div>
+
+    <div class="right-panel">
+      <div class="w-full max-w-sm">
+        <div class="text-center mb-8 fade-in">
+          <div class="inline-block p-4 rounded-full border-2 border-[#d4af37] mb-4 shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+            <i class="fas fa-user-plus text-3xl gold-text"></i>
+          </div>
+          <h2 class="text-3xl font-bold mb-2">ĐĂNG KÝ</h2>
+          <p class="text-gray-400">Tạo tài khoản thành viên mới</p>
+        </div>
+
+        <form action="/auth/register" method="POST" id="registerForm" class="space-y-5 fade-in">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Tên tài khoản</label>
+            <input type="text" name="username" required class="form-input" placeholder="Nhập tên đăng nhập...">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Địa chỉ Email</label>
+            <input type="email" name="email" required class="form-input" placeholder="example@gmail.com">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Mật khẩu</label>
+            <div class="relative">
+              <input type="password" id="password" name="password" required class="form-input" placeholder="••••••••">
+              <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-gold w-full py-3.5 rounded-lg flex items-center justify-center gap-2 mt-4" id="submitBtn">
+            <span id="submitText">TẠO TÀI KHOẢN</span>
+          </button>
+        </form>
+
+        <div id="success-message" class="mt-4 text-center text-[#d4af37] font-bold text-sm"></div>
+
+        <div class="mt-8 pt-6 border-t border-gray-800 text-center fade-in">
+          <p class="text-gray-500 text-sm">Đã có tài khoản?</p>
+          <a href="/login" class="inline-block mt-2 font-bold gold-text hover:brightness-125 transition">
+            Đăng nhập ngay
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Hiệu ứng GSAP
+      gsap.to(".fade-in", { 
+        opacity: 1, 
+        y: 0, 
+        duration: 1, 
+        stagger: 0.2, 
+        ease: "power4.out" 
+      });
+
+      // Ẩn hiện mật khẩu
+      const togglePassword = document.getElementById('togglePassword');
+      const password = document.getElementById('password');
+      togglePassword.addEventListener('click', () => {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        togglePassword.classList.toggle('fa-eye');
+        togglePassword.classList.toggle('fa-eye-slash');
+      });
+
+      // Xử lý submit
+      const form = document.getElementById('registerForm');
+      form.addEventListener('submit', (e) => {
+        const btnText = document.getElementById('submitText');
+        btnText.textContent = "ĐANG XỬ LÝ...";
+        // Form sẽ tự submit theo action chỉ định
+      });
+    });
+  </script>
+</body>
+</html>

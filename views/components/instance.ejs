@@ -1,0 +1,123 @@
+<div class="bg-neutral-900/50 backdrop-blur-md rounded-xl shadow-2xl mx-4 sm:mx-6 mt-2 mb-4 border border-white/5 gold-glow-soft">
+   <div class="relative">
+       <nav class="flex overflow-x-auto pb-1 px-1 scrollbar-hide">
+           <ul role="list" class="flex flex-nowrap text-sm font-semibold tracking-wide text-gray-500">
+               
+               <li class="shrink-0 relative">
+                   <a href="/instance/<%= req.params.id %>" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                       <i class="fas fa-terminal mr-2 text-xs group-hover:gold-text"></i>
+                       <span class="uppercase tracking-tighter">Console</span>
+                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                   </a>
+               </li>
+
+               <li class="shrink-0 relative">
+                   <a href="/instance/<%= req.params.id %>/files" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                       <i class="fas fa-folder-open mr-2 text-xs group-hover:gold-text"></i>
+                       <span class="uppercase tracking-tighter">Tệp tin</span>
+                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                   </a>
+               </li>
+
+               <li class="shrink-0 relative">
+                   <a href="/instance/<%= req.params.id %>/users" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                       <i class="fas fa-users mr-2 text-xs group-hover:gold-text"></i>
+                       <span class="uppercase tracking-tighter">Người dùng</span>
+                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                   </a>
+               </li>
+
+               <li class="shrink-0 relative">
+                   <a href="/instance/<%= req.params.id %>/db" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                       <i class="fas fa-database mr-2 text-xs group-hover:gold-text"></i>
+                       <span class="uppercase tracking-tighter">Cơ sở dữ liệu</span>
+                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                   </a>
+               </li>
+
+               <li class="shrink-0 relative">
+                   <a href="/instance/<%= req.params.id %>/archives" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                       <i class="fas fa-archive mr-2 text-xs group-hover:gold-text"></i>
+                       <span class="uppercase tracking-tighter">Sao lưu</span>
+                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                   </a>
+               </li>
+
+               <li class="shrink-0 relative">
+                   <a href="/instance/<%= req.params.id %>/startup" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                       <i class="fas fa-play-circle mr-2 text-xs group-hover:gold-text"></i>
+                       <span class="uppercase tracking-tighter">Khởi động</span>
+                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                   </a>
+               </li>
+
+               <% if (addons && addons.plugins) { %>
+                   <% addons.plugins.forEach(plugin => { %>
+                       <% if (plugin.instancesidebar) { %>
+                           <% Object.entries(plugin.instancesidebar).forEach(([key, value]) => { %>
+                               <li class="shrink-0 relative">
+                                   <a href="<%= (value.url).replace('%id%', req.params.id) %>" class="nav-link px-5 py-4 hover:text-white transition-all duration-300 flex items-center relative group">
+                                       <span class="mr-2 text-xs group-hover:gold-text">
+                                           <% if (value.icon.startsWith('<svg')) { %>
+                                               <span class="w-4 h-4 inline-block"><%- value.icon %></span>
+                                           <% } else { %>
+                                               <i class="<%= value.icon %>"></i>
+                                           <% } %>
+                                       </span>
+                                       <span class="uppercase tracking-tighter"><%= key %></span>
+                                       <span class="absolute bottom-0 left-0 right-0 h-[2px] gold-gradient-bg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                                   </a>
+                               </li>
+                           <% }); %>
+                       <% } %>
+                   <% }); %>
+               <% } %>
+
+           </ul>
+       </nav>
+   </div>
+</div>
+
+<style>
+   .gold-gradient-bg {
+       background: linear-gradient(90deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+   }
+   .gold-text {
+       color: #D4AF37 !important;
+   }
+   .gold-glow-soft {
+       box-shadow: 0 4px 20px -5px rgba(179, 135, 40, 0.2);
+   }
+   .scrollbar-hide::-webkit-scrollbar { display: none; }
+   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+   .nav-link.active {
+       color: #D4AF37 !important;
+       background: rgba(212, 175, 55, 0.05);
+   }
+   .nav-link.active .gold-gradient-bg {
+       transform: scaleX(1);
+   }
+</style>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+       const currentPath = window.location.pathname;
+       const navLinks = document.querySelectorAll('.nav-link');
+
+       navLinks.forEach(link => {
+           const href = link.getAttribute('href');
+           // Kiểm tra khớp đường dẫn chính xác hoặc đường dẫn con
+           if (currentPath === href || (currentPath.startsWith(href) && href !== '/instance')) {
+               link.classList.add('active');
+               const indicator = link.querySelector('.gold-gradient-bg');
+               if (indicator) indicator.classList.add('scale-x-100');
+           }
+
+           link.addEventListener('click', function() {
+               navLinks.forEach(l => l.classList.remove('active'));
+               this.classList.add('active');
+           });
+       });
+   });
+</script>

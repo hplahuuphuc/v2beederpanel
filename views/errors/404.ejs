@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Không tìm thấy trang | <%= name %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['IBM Plex Sans', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 4s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0) scale(1)' },
+              '50%': { transform: 'translateY(-20px) scale(1.05)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    .gold-gradient {
+      background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-bg {
+      background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+    }
+    .gold-shadow {
+      box-shadow: 0 0 30px rgba(179, 135, 40, 0.2);
+    }
+    .gold-border {
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+  </style>
+</head>
+
+<body class="h-full bg-[#050505] text-gray-300 font-sans overflow-hidden">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#B38728] opacity-5 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#B38728] opacity-5 blur-[120px] rounded-full"></div>
+  </div>
+
+  <div class="flex flex-col items-center justify-center min-h-screen px-4 py-12 relative z-10">
+    <div class="w-full max-w-md space-y-12 text-center">
+      
+      <div class="relative group">
+        <div class="absolute inset-0 bg-[#B38728] blur-[60px] opacity-10 group-hover:opacity-20 transition-opacity duration-1000"></div>
+        <svg class="w-56 h-56 mx-auto animate-float text-[#D4AF37] opacity-80" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 10h.01M15 10h.01M9.172 16.172a4 4 0 015.656 0" />
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="text-7xl font-black tracking-tighter text-white drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)]">404</span>
+        </div>
+      </div>
+      
+      <div class="space-y-6">
+        <div class="inline-block px-3 py-1 rounded-full border gold-border bg-white/5 backdrop-blur-sm">
+            <span class="text-[10px] font-bold uppercase tracking-[0.3em] gold-gradient">Lỗi truy cập</span>
+        </div>
+        
+        <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl uppercase">
+            Bạn đang <span class="gold-gradient">lạc đường?</span>
+        </h1>
+        
+        <p class="text-gray-400 max-w-xs mx-auto text-sm leading-relaxed">
+          Trang bạn đang tìm kiếm không tồn tại hoặc đã được chuyển sang một địa chỉ khác trong hệ thống.
+        </p>
+        
+        <div class="pt-8 flex flex-col gap-4 items-center">
+          <a href="../" class="gold-bg text-black font-bold px-10 py-4 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg gold-shadow uppercase tracking-widest text-xs flex items-center gap-2">
+            <i class="fas fa-arrow-left"></i> Quay lại trang chủ
+          </a>
+          
+          <a href="#" class="text-xs font-semibold text-gray-500 hover:text-[#D4AF37] transition-colors tracking-widest uppercase">
+            Liên hệ hỗ trợ kĩ thuật
+          </a>
+        </div>
+      </div>
+      
+      <div class="pt-12">
+        <p class="text-[10px] text-gray-700 uppercase tracking-[0.5em]">
+          Powered by <%= name %> Security
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>

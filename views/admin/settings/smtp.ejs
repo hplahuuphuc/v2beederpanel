@@ -1,0 +1,115 @@
+<%- include('../../components/admin_template') %>
+
+<main id="content" class="bg-black min-h-screen pb-10">
+  <div class="bg-transparent">
+    <div class="sm:flex sm:items-center px-8 pt-6">
+      <div class="sm:flex-auto">
+        <h1 class="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-500 to-amber-200">
+          <%= req.translations.settings || 'Cài Đặt Hệ Thống' %>
+        </h1>
+        <p class="mt-1 text-sm text-amber-600/60 italic">
+          <%= req.translations.changeSettings || 'Quản lý cấu hình gửi Email và thông báo hệ thống.' %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../../components/settings') %>
+
+  <div class="flex flex-col bg-neutral-900/50 m-8 mt-4 rounded-xl border border-amber-900/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden">
+    <h2 class="text-amber-200 text-[18px] px-6 py-4 mb-0 w-full bg-gradient-to-r from-amber-950/40 to-transparent border-b border-amber-900/30 font-semibold flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+      <%= req.translations.smtp || 'Cấu Hình Máy Chủ Email (SMTP)' %>
+    </h2>
+    
+    <form class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6" action="/admin/settings/saveSmtpSettings" method="POST">
+      <div class="space-y-4">
+        <div>
+          <label for="smtpServer" class="text-amber-100/70 text-sm font-medium ml-1">Máy chủ SMTP:</label>
+          <input type="text" id="smtpServer" name="smtpServer" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm mt-1.5 w-full px-4 py-2.5 bg-black/40 placeholder-neutral-600 transition" value="<%= smtpSettings.server || '' %>" placeholder="vd: smtp.gmail.com" required>
+        </div>
+        
+        <div>
+          <label for="smtpPort" class="text-amber-100/70 text-sm font-medium ml-1">Cổng (Port):</label>
+          <input type="number" id="smtpPort" name="smtpPort" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm mt-1.5 w-full px-4 py-2.5 bg-black/40 placeholder-neutral-600 transition" value="<%= smtpSettings.port || '' %>" placeholder="465 hoặc 587" required>
+        </div>
+        
+        <div>
+          <label for="smtpUser" class="text-amber-100/70 text-sm font-medium ml-1">Tài khoản SMTP:</label>
+          <input type="text" id="smtpUser" name="smtpUser" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm mt-1.5 w-full px-4 py-2.5 bg-black/40 placeholder-neutral-600 transition" value="<%= smtpSettings.username || '' %>" placeholder="Email gửi tin" required>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="smtpPass" class="text-amber-100/70 text-sm font-medium ml-1">Mật khẩu ứng dụng:</label>
+          <input type="password" id="smtpPass" name="smtpPass" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm mt-1.5 w-full px-4 py-2.5 bg-black/40 placeholder-neutral-600 transition" value="<%= smtpSettings.password || '' %>" placeholder="••••••••••••" required>
+        </div>
+
+        <div>
+          <label for="smtpFromName" class="text-amber-100/70 text-sm font-medium ml-1">Tên người gửi hiển thị:</label>
+          <input type="text" id="smtpFromName" name="smtpFromName" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm mt-1.5 w-full px-4 py-2.5 bg-black/40 placeholder-neutral-600 transition" value="<%= smtpSettings.fromName || '' %>" placeholder="Tên Panel của bạn" required>
+        </div>
+
+        <div>
+          <label for="smtpFromAddress" class="text-amber-100/70 text-sm font-medium ml-1">Email gửi đi (From Address):</label>
+          <input type="email" id="smtpFromAddress" name="smtpFromAddress" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm mt-1.5 w-full px-4 py-2.5 bg-black/40 placeholder-neutral-600 transition" value="<%= smtpSettings.fromAddress || '' %>" placeholder="noreply@domain.com" required>
+        </div>
+      </div>
+
+      <div class="md:col-span-2 pt-2">
+        <button type="submit" class="w-full md:w-auto px-8 py-3 rounded-xl bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-black font-bold text-sm shadow-[0_4px_15px_rgba(217,119,6,0.3)] transition active:scale-95">
+          <%= req.translations.saveSmtpSettings || 'Lưu Cấu Hình SMTP' %>
+        </button>
+      </div>
+    </form>
+
+    <div class="border-t border-amber-900/20 mx-6"></div>
+
+    <div class="p-6 bg-black/20">
+      <h3 class="text-amber-500/80 text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Kiểm tra kết nối
+      </h3>
+      <form action="/sendTestEmail" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
+        <div class="flex-1 w-full">
+          <label for="recipientEmail" class="text-neutral-500 text-xs block mb-1.5 ml-1">Email nhận thử nghiệm:</label>
+          <input type="email" id="recipientEmail" name="recipientEmail" class="rounded-xl border-amber-900/20 focus:ring-amber-500 focus:border-amber-500 text-white text-sm w-full px-4 py-2.5 bg-black/40 transition" placeholder="email-cua-ban@gmail.com" required>
+        </div>
+        <button type="submit" class="w-full md:w-auto px-6 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 border border-amber-900/50 text-amber-400 text-sm font-medium transition active:scale-95 shadow-lg">
+          <%= req.translations.sendTestEmail || 'Gửi Thử Email' %>
+        </button>
+      </form>
+
+      <div class="mt-4">
+        <% if (req.query.msg && req.query.msg === "TestemailSentsuccess") { %>
+            <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                <span class="text-emerald-500 text-sm flex items-center gap-2">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                    <%= req.translations.testEmailSuccess || 'Email thử nghiệm đã được gửi thành công!' %>
+                </span>
+            </div>
+        <% } %>
+        <% if (req.query.err && req.query.err === "TestemailSentfailed") { %>
+            <div class="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                <span class="text-red-400 text-sm flex items-center gap-2">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/></svg>
+                    <%= req.translations.testEmailFailed || 'Gửi email thất bại. Hãy kiểm tra lại thông tin SMTP.' %>
+                </span>
+            </div>
+        <% } %>
+        <% if (req.query.msg && req.query.msg === "SmtpSaveSuccess") { %>
+            <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                <span class="text-amber-500 text-sm"><%= req.translations.settingsSaved || 'Đã lưu cấu hình thành công.' %></span>
+            </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../../components/head') %>

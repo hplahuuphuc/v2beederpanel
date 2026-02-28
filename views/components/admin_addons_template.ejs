@@ -1,0 +1,279 @@
+<!doctype html>
+<html class="h-full w-full">
+   <head>
+      <title><%= name %></title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://api.fontshare.com/v2/css?f[]=general-sans@500,300,600,400,700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   </head>
+   <body style="font-family: 'Space Grotesk', 'General Sans', sans-serif;" class="bg-[#0c0a09] h-full w-full text-stone-300">
+      <style>
+         /* Tối ưu Sidebar Gold */
+         .sidebar-gold {
+            background: linear-gradient(180deg, #131110 0%, #0c0a09 100%);
+            border-right: 1px solid rgba(251, 191, 36, 0.1);
+         }
+         
+         .collapsed { width: 4.5rem !important; }
+         .collapsed span, .collapsed p, .collapsed h1 { display: none; }
+         .colcont { padding-left: 4.5rem !important; }
+         .transition-all-300 { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+         /* Hiệu ứng Active Link Gold Metallic */
+         #active-background {
+            position: absolute;
+            left: 0.75rem;
+            width: calc(100% - 1.5rem);
+            height: 2.5rem;
+            background: linear-gradient(90deg, rgba(217, 119, 6, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%);
+            border-left: 3px solid #fbbf24;
+            border-radius: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+         }
+
+         .nav-link { position: relative; z-index: 10; }
+         .nav-link.active { color: #fde68a !important; }
+         .nav-link.active svg { color: #fbbf24; filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.4)); }
+
+         /* Gold Shimmer Animation */
+         .gold-text-gradient {
+            background: linear-gradient(to right, #fde68a, #fbbf24, #b45309);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+         }
+
+         /* Scrollbar tinh tế */
+         ::-webkit-scrollbar { width: 4px; }
+         ::-webkit-scrollbar-track { background: transparent; }
+         ::-webkit-scrollbar-thumb { background: #292524; border-radius: 10px; }
+         ::-webkit-scrollbar-thumb:hover { background: #44403c; }
+      </style>
+
+      <script>
+         document.addEventListener('DOMContentLoaded', () => {
+             const sidebar = document.querySelector('.sidebar');
+             const toggleButton = document.getElementById('sidebar-toggle');
+             const colcont = document.getElementById('colcont');
+         
+             function setCookie(name, value, days) {
+                 const date = new Date();
+                 date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                 document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+             }
+             function getCookie(name) {
+                 const nameEQ = name + "=";
+                 const ca = document.cookie.split(';');
+                 for(let i = 0; i < ca.length; i++) {
+                     let c = ca[i];
+                     while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                     if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                 }
+                 return null;
+             }
+
+             if (getCookie('sidebar-collapsed') === 'true') {
+                 sidebar.classList.add('collapsed');
+                 colcont.classList.add('colcont');
+             }
+
+             toggleButton.addEventListener('click', () => {
+                 sidebar.classList.toggle('collapsed');
+                 colcont.classList.toggle('colcont');
+                 setCookie('sidebar-collapsed', sidebar.classList.contains('collapsed'), 7);
+             });
+
+             // Loader Logic
+             setTimeout(() => {
+                 const loader = document.getElementById('loader');
+                 loader.classList.add('opacity-0');
+                 setTimeout(() => loader.style.display = 'none', 300);
+             }, 500);
+         });
+      </script>
+
+      <div class="sidebar transition-all-300 hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+        <div class="flex grow flex-col gap-y-5 overflow-hidden sidebar-gold">
+           <nav class="flex flex-1 flex-col">
+              <div class="pl-7 pt-6 pb-6 flex items-center">
+                 <a href="/" class="flex items-center group">
+                    <% if (logo == true) { %>
+                    <img src="../assets/logo.png" class="h-8 w-8 rounded-lg mr-3 shadow-[0_0_15px_rgba(251,191,36,0.2)] group-hover:scale-110 transition-transform">
+                     <% } %>
+                     <h1 class="text-white font-black tracking-tighter text-xl gold-text-gradient"><%= name %></h1>
+                  </a>
+               </div>
+               
+               <ul role="list" class="flex flex-1 flex-col px-3">
+                  <li class="relative">
+                     <div id="active-background"></div>
+                     <ul role="list" class="space-y-1">
+                        <li>
+                          <a href="/admin/overview" class="nav-link transition-all-300 group flex gap-x-3 rounded-xl px-4 py-2.5 text-sm font-medium text-stone-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 transition-colors group-hover:text-amber-400">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                            </svg>                                                              
+                            <span>Go Back</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/admin/overview" class="nav-link transition-all-300 group flex gap-x-3 rounded-xl px-4 py-2.5 text-sm font-medium text-stone-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 transition-colors group-hover:text-amber-400">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>                                               
+                            <span>Overview</span>
+                          </a>
+                        </li>
+          
+                        <p class="pl-4 text-[10px] uppercase tracking-[0.2em] text-amber-500/50 font-bold pt-8 pb-2">Plugins System</p>
+                        <% Object.keys(pluginsidebar).forEach(plugin => { %>
+                        <li>
+                          <a href="<%= pluginsidebar[plugin] %>" class="nav-link transition-all-300 group flex gap-x-3 rounded-xl px-4 py-2.5 text-sm font-medium text-stone-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 transition-colors group-hover:text-amber-400">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                            </svg>                                                               
+                            <span><%= plugin %></span>
+                          </a>
+                        </li>
+                        <% }) %>
+                     </ul>
+                  </li>
+
+                  <li class="mt-auto pb-6">
+                    <a href="/auth/logout" class="flex gap-x-3 rounded-xl px-4 py-3 text-sm font-semibold text-stone-500 hover:text-red-400 hover:bg-red-500/5 transition-all">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                       </svg>
+                       <span>Sign Out</span>
+                    </a>
+                  </li>
+               </ul>
+             </nav>
+          </div>
+       </div>
+
+       <div id="colcont" class="lg:pl-64 transition-all-300">
+          <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-[#0c0a09]/80 backdrop-blur-md px-4 border-b border-white/5 sm:gap-x-6">
+             <button type="button" id="sidebar-toggle" class="p-2 rounded-lg text-stone-400 hover:bg-stone-800 hover:text-amber-400 transition-all">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+             </button>
+
+             <div class="flex flex-1 gap-x-4 self-stretch items-center justify-between">
+                <div class="relative max-w-md w-full">
+                   <div class="flex items-center bg-stone-900/50 border border-white/5 rounded-xl px-4 py-1.5 focus-within:border-amber-500/50 transition-all">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 text-stone-500">
+                         <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+                      </svg>
+                      <input id="searchInput" 
+                         class="bg-transparent border-none focus:ring-0 w-full ml-2 text-sm text-stone-200 placeholder:text-stone-600" 
+                         placeholder="Search anything... (F1)" 
+                         type="search" 
+                         autocomplete="off">
+                   </div>
+                   <div id="searchResults" class="absolute bg-stone-900 border border-white/10 w-full rounded-xl shadow-2xl hidden mt-2 p-2 z-50"></div>
+                </div>
+
+                <div class="flex items-center gap-x-4">
+                  <div class="relative">
+                    <button type="button" class="flex items-center p-1 rounded-xl hover:bg-stone-900 transition-all" id="user-menu-button" onclick="toggleDropdown()">
+                      <div class="relative">
+                         <img class="h-9 w-9 rounded-lg bg-stone-800 border border-amber-500/20" src="https://api.dicebear.com/9.x/thumbs/svg?seed=<%= user.username %>" alt="">
+                         <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-[#0c0a09] rounded-full"></div>
+                      </div>
+                      <span class="hidden lg:flex flex-col items-start ml-3 text-left">
+                        <span class="text-sm font-bold text-white leading-none"><%= user.username %></span>
+                        <span class="text-[10px] text-stone-500 mt-1 font-mono uppercase tracking-tighter">ID: <%= user.userId.substring(0, 8) %></span>
+                      </span>
+                      <svg class="ml-2 h-4 w-4 text-stone-600" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21l4.25 4.25 4.25-4.25a.75.75 0 111.06 1.06l-4.78 4.78a.75.75 0 01-1.06 0L4.17 8.27a.75.75 0 111.06-1.06z"/></svg>
+                    </button>
+                    
+                    <div id="dropdown-menu" class="hidden absolute right-0 mt-3 w-64 bg-[#141211] border border-amber-500/10 rounded-2xl shadow-2xl py-2 z-50 backdrop-blur-xl">
+                      <div class="px-4 py-3 border-b border-white/5">
+                        <p class="text-xs font-bold text-amber-500 uppercase tracking-widest">System Settings</p>
+                      </div>
+                      <div class="p-4">
+                        <p class="text-sm font-medium text-stone-300 mb-3">Display Theme</p>
+                        <div class="grid grid-cols-3 gap-2">
+                           <button class="flex flex-col items-center p-2 rounded-xl bg-stone-800 hover:bg-amber-500/20 transition-all border border-white/5">
+                              <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0ZM128,64a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64Z"></path></svg>
+                           </button>
+                           <button class="flex flex-col items-center p-2 rounded-xl bg-stone-800 hover:bg-amber-500/20 transition-all border border-white/5">
+                              <svg class="w-5 h-5 text-stone-400" fill="currentColor" viewBox="0 0 256 256"><path d="M216.2,160.93a96,96,0,1,0-110.53-114,8,8,0,0,0,10.6,9.06,88.07,88.07,0,0,1,109,115.54,8,8,0,0,0,9.06,10.6A8,8,0,0,0,216.2,160.93Z"></path></svg>
+                           </button>
+                           <button class="flex flex-col items-center p-2 rounded-xl bg-stone-800 hover:bg-amber-500/20 transition-all border border-white/5">
+                              <svg class="w-5 h-5 text-stone-400" fill="currentColor" viewBox="0 0 256 256"><path d="M232,64V176a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V64A24,24,0,0,1,48,40H208A24,24,0,0,1,232,64Z"></path></svg>
+                           </button>
+                        </div>
+                      </div>
+                      <div class="px-4 py-3">
+                        <label class="text-sm font-medium text-stone-300">Language</label>
+                        <select onchange="changeLanguage(this.value)" class="mt-2 block w-full bg-stone-800 border-none rounded-lg text-sm text-stone-300 focus:ring-amber-500/50">
+                           <option value="en">English (US)</option>
+                           <option value="vi">Tiếng Việt</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+             </div>
+          </div>
+
+          <div id="content" class="transition-all duration-500">
+             </div>
+       </div>
+
+       <div id="loader" class="fixed inset-0 flex items-center justify-center bg-[#0c0a09] transition-opacity duration-500 z-[100]">
+          <div class="flex flex-col items-center">
+             <div class="relative w-16 h-16">
+                <div class="absolute inset-0 rounded-full border-t-2 border-amber-500 animate-spin"></div>
+                <div class="absolute inset-2 rounded-full border-r-2 border-amber-200 animate-spin-slow"></div>
+             </div>
+             <p class="mt-4 text-[10px] uppercase tracking-[0.4em] text-amber-500 font-bold">Synchronizing</p>
+          </div>
+       </div>
+
+       <script>
+         function toggleDropdown() {
+           document.getElementById('dropdown-menu').classList.toggle('hidden');
+         }
+         
+         window.addEventListener('click', (e) => {
+           if (!document.getElementById('user-menu-button').contains(e.target)) {
+             document.getElementById('dropdown-menu').classList.add('hidden');
+           }
+         });
+
+         // Logic Update Active Nav
+         document.addEventListener('DOMContentLoaded', () => {
+            const activeBg = document.getElementById('active-background');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            function moveActiveBg(el) {
+               if(!el) return;
+               const rect = el.getBoundingClientRect();
+               const parentRect = el.closest('ul').getBoundingClientRect();
+               activeBg.style.top = `${rect.top - parentRect.top}px`;
+               activeBg.style.height = `${rect.height}px`;
+            }
+
+            const currentPath = window.location.pathname;
+            navLinks.forEach(link => {
+               if(link.getAttribute('href') === currentPath) {
+                  link.classList.add('active');
+                  moveActiveBg(link);
+               }
+            });
+         });
+
+         function changeLanguage(lang) {
+            fetch(`/setLanguage?lang=${lang}`).then(() => location.reload());
+         }
+       </script>
+   </body>
+</html>

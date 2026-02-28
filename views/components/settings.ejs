@@ -1,0 +1,70 @@
+<div class="mt-8 ml-8 mb-8 animate-fade-in">
+  <div>
+    <div class="hidden sm:block">
+      <nav class="flex">
+        <ul role="list" class="flex min-w-full flex-none gap-x-3 text-sm font-medium leading-6 text-neutral-500">
+          
+          <li class="relative">
+            <a href="/admin/settings" class="nav-link2 py-2.5 px-4 transition-all duration-300 border border-white/5 hover:bg-white/5 hover:text-[#D4AF37] flex items-center rounded-xl group">
+              <i class="fas fa-sliders-h mr-2 text-xs group-hover:gold-text"></i>                                                                   
+              <span class="tracking-wide uppercase text-[11px]">Cài đặt chung</span>
+            </a>
+          </li>
+
+          <li class="relative">
+            <a href="/admin/settings/smtp" class="nav-link2 py-2.5 px-4 transition-all duration-300 border border-white/5 hover:bg-white/5 hover:text-[#D4AF37] flex items-center rounded-xl group">
+              <i class="fas fa-envelope-open-text mr-2 text-xs group-hover:gold-text"></i>                                                                        
+              <span class="tracking-wide uppercase text-[11px]">Cấu hình Mail</span>
+            </a>
+          </li>
+
+          <li class="relative">
+            <a href="/admin/settings/theme" class="nav-link2 py-2.5 px-4 transition-all duration-300 border border-white/5 hover:bg-white/5 hover:text-[#D4AF37] flex items-center rounded-xl group">
+              <i class="fas fa-paint-brush mr-2 text-xs group-hover:gold-text"></i>
+              <span class="tracking-wide uppercase text-[11px]">Giao diện</span>
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Hiệu ứng Gold đặc biệt cho Admin */
+  .gold-text { color: #D4AF37 !important; }
+  
+  .nav-active-gold {
+    background: linear-gradient(135deg, rgba(191, 149, 63, 0.2), rgba(252, 246, 186, 0.05)) !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    color: #D4AF37 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(212, 175, 55, 0.1);
+  }
+
+  /* Hiệu ứng xuất hiện mượt mà */
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link2');
+    
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      
+      // Kiểm tra khớp chính xác đường dẫn
+      if (currentPath === href) {
+        link.classList.add('nav-active-gold');
+        // Thêm icon vương miện nhỏ nếu là mục đang hoạt động (tùy chọn)
+        const icon = link.querySelector('i');
+        if(icon) icon.className = icon.className.replace('mr-2', 'mr-2 shadow-glow');
+      }
+    });
+  });
+</script>

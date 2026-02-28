@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= name %> - Đăng Nhập</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold-primary: #d4af37;
+      --gold-light: #f9e29c;
+      --gold-dark: #aa841e;
+      --background: #0a0a0a;
+      --surface: #1a1a1a;
+      --border: #3d341d;
+      --text-primary: #ffffff;
+      --text-secondary: #b5b5b5;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text-primary);
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Khung bên trái dùng VIDEO */
+    .left-panel {
+      flex: 1;
+      position: relative;
+      display: none;
+      background: #000;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .left-panel { display: block; }
+    }
+
+    /* Video phủ kín khung trái */
+    .media-content {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7) contrast(1.1);
+    }
+
+    .right-panel {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: var(--surface);
+      border-left: 2px solid var(--gold-dark);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+
+    @media (max-width: 767px) {
+      .right-panel { max-width: 100%; border-left: none; }
+    }
+
+    .fade-in { opacity: 0; transform: translateY(20px); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary), var(--gold-light));
+      background-size: 200% 200%;
+      color: #000;
+      font-weight: 700;
+      transition: all 0.4s ease;
+      animation: gradientShift 5s ease infinite;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      filter: brightness(1.1);
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .form-input {
+      background: #121212;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+      outline: none;
+    }
+
+    .gold-text {
+      background: linear-gradient(to right, #f9e29c, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="split-container">
+    <div class="left-panel">
+      <video id="side-video" class="media-content" autoplay muted loop playsinline>
+        <source src="https://image2url.com/r2/default/videos/1771388145096-20b65ac3-5488-4db1-b9e3-c01a7e021c0a.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent to-[#1a1a1a]"></div>
+    </div>
+
+    <div class="right-panel">
+      <div class="w-full max-w-sm">
+        
+        <div class="text-center mb-10 fade-in">
+          <div class="inline-block p-4 rounded-full border-2 border-[#d4af37] mb-4">
+            <i class="fas fa-crown text-3xl gold-text"></i>
+          </div>
+          <h2 class="text-3xl font-bold mb-2">Chào Mừng Trở Lại</h2>
+          <p class="text-gray-400">Vui lòng đăng nhập vào hệ thống</p>
+        </div>
+
+        <form action="/auth/login" method="POST" class="space-y-6 fade-in">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Tên đăng nhập / Email</label>
+            <div class="relative">
+              <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+              <input type="text" name="username" required
+                     class="form-input w-full p-3 pl-10 rounded-lg"
+                     placeholder="Nhập tài khoản...">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Mật khẩu</label>
+            <div class="relative">
+              <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+              <input type="password" name="password" required
+                     class="form-input w-full p-3 pl-10 rounded-lg"
+                     placeholder="••••••••">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center cursor-pointer">
+              <input type="checkbox" class="rounded border-gray-700 bg-gray-800 text-[#d4af37] focus:ring-[#d4af37]">
+              <span class="ml-2 text-gray-400">Ghi nhớ tôi</span>
+            </label>
+            <a href="#" class="text-[#d4af37] hover:underline">Quên mật khẩu?</a>
+          </div>
+
+          <button type="submit" class="btn-gold w-full py-3 rounded-lg flex items-center justify-center gap-2">
+            <span>ĐĂNG NHẬP</span>
+            <i class="fas fa-sign-in-alt"></i>
+          </button>
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-gray-800 text-center fade-in">
+          <p class="text-gray-400 text-sm">Chưa có tài khoản?</p>
+          <a href="/register" class="inline-block mt-2 font-bold gold-text hover:brightness-125 transition">
+            Tạo tài khoản ngay bây giờ
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Giữ nguyên hiệu ứng GSAP đẹp như cũ
+      gsap.to(".fade-in", { 
+        opacity: 1, 
+        y: 0, 
+        duration: 1, 
+        stagger: 0.2, 
+        ease: "power4.out" 
+      });
+    });
+
+    // Hàm thay link video bằng code
+    function changeLeftVideo(url) {
+      const video = document.getElementById('side-video');
+      video.src = url;
+      video.load();
+      video.play();
+    }
+  </script>
+</body>
+</html>

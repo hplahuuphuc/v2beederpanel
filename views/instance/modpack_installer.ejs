@@ -1,0 +1,180 @@
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ===== SAFE DOM INIT =====
+  const searchInput = document.getElementById('searchInput');
+  const platformFilter = document.getElementById('platformFilter');
+  const gameVersionFilter = document.getElementById('gameVersionFilter');
+  const loadMoreBtn = document.getElementById('loadMore');
+  const installModal = document.getElementById('installModal');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modpackVersionSelect = document.getElementById('modpackVersion');
+  const installProgress = document.getElementById('installProgress');
+  const installStatus = document.getElementById('installStatus');
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toastMessage');
+
+  // ===== SAFE LISTENERS =====
+  if (searchInput)
+    searchInput.addEventListener('input', debounce(updateUrlParams, 400));
+
+  if (platformFilter)
+    platformFilter.addEventListener('change', updateUrlParams);
+
+  if (gameVersionFilter)
+    gameVersionFilter.addEventListener('change', updateUrlParams);
+
+  if (modalCloseBtn)
+    modalCloseBtn.addEventListener('click', closeModal);
+
+  if (installModal)
+    installModal.addEventListener('click', (e) => {
+      if (e.target === installModal) closeModal();
+    });
+
+  // ===== LOAD MORE =====
+  window.loadMoreModpacks = function () {
+    const url = new URL(window.location.href);
+    const currentPage = parseInt(url.searchParams.get('page') || '1');
+    url.searchParams.set('page', currentPage + 1);
+    window.location.href = url.toString();
+  };
+
+  // ===== UPDATE FILTER =====
+  function updateUrlParams() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', '1');
+
+    if (searchInput?.value.trim())
+      url.searchParams.set('q', searchInput.value.trim());
+    else
+      url.searchParams.delete('q');
+
+    if (platformFilter?.value !== 'all')
+      url.searchParams.set('platform', platformFilter.value);
+    else
+      url.searchParams.delete('platform');
+
+    if (gameVersionFilter?.value !== 'all')
+      url.searchParams.set('gameVersion', gameVersionFilter.value);
+    else
+      url.searchParams.delete('gameVersion');
+
+    window.location.href = url.toString();
+  }
+
+  // ===== INSTALL =====
+  window.installModpack = async function (event, modpackId, modpackName, platform) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try {
+      showModal(`Installing ${modpackName}`);
+
+      const versions = await fetchVersions(modpackId, platform);
+      if (!versions.length)
+        throw new Error("No versions available");
+
+      modpackVersionSelect.innerHTML = versions.map(v =>
+        `<option value="${v.id}">
+          ${v.name} (MC ${v.game_versions?.join(', ') || 'Unknown'})
+        </option>`
+      ).join('');
+
+      // Không chờ change nữa → lấy default luôn
+      const selectedVersionId = modpackVersionSelect.value;
+
+      updateProgress(20, "Downloading files...");
+      await delay(800);
+
+      updateProgress(50, "Processing dependencies...");
+      await delay(800);
+
+      updateProgress(75, "Installing...");
+      await performInstallation(modpackId, modpackName, platform, selectedVersionId);
+
+      updateProgress(100, "Installation complete!");
+      showToast("Modpack installed successfully");
+
+    } catch (err) {
+      console.error(err);
+      updateProgress(0, "Installation failed");
+      showToast(err.message || "Installation failed", "error");
+    } finally {
+      setTimeout(closeModal, 2000);
+    }
+  };
+
+  // ===== FETCH VERSIONS =====
+  async function fetchVersions(modpackId, platform) {
+    try {
+      const instanceId = window.location.pathname.split('/')[2];
+      const res = await fetch(`/instance/${instanceId}/modpacks/versions?platform=${platform}&modpackId=${modpackId}`);
+      if (!res.ok) throw new Error("Failed to fetch versions");
+      return await res.json();
+    } catch (err) {
+      showToast("Failed to load versions", "error");
+      return [];
+    }
+  }
+
+  // ===== PERFORM INSTALL =====
+  async function performInstallation(modpackId, modpackName, platform, versionId) {
+    const instanceId = window.location.pathname.split('/')[2];
+
+    const params = new URLSearchParams({
+      platform,
+      modpackId,
+      versionId,
+      modpackName
+    });
+
+    const res = await fetch(`/instance/${instanceId}/modpacks/download?${params}`);
+
+    if (!res.ok)
+      throw new Error("Download failed");
+
+    return true;
+  }
+
+  // ===== MODAL =====
+  function showModal(title) {
+    document.getElementById('modalTitle').textContent = title;
+    installModal.classList.add('active');
+    installProgress.style.width = "0%";
+    installStatus.textContent = "Starting...";
+  }
+
+  function updateProgress(percent, message) {
+    installProgress.style.width = percent + "%";
+    installStatus.textContent = message;
+  }
+
+  function closeModal() {
+    installModal.classList.remove('active');
+  }
+
+  // ===== TOAST =====
+  function showToast(message, type = "success") {
+    toastMessage.textContent = message;
+    toast.className = "toast " + type;
+    toast.classList.add("show");
+
+    setTimeout(() => toast.classList.remove("show"), 3000);
+  }
+
+  // ===== UTILS =====
+  function delay(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return function () {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(), wait);
+    };
+  }
+
+});
+</script>

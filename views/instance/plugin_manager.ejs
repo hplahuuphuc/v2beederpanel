@@ -1,0 +1,229 @@
+<%- include('../components/template') %>
+<style>
+  :root {
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --success-color: #10b981;
+    --error-color: #ef4444;
+  }
+
+  .plugin-manager-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Search & Header */
+  .plugin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+  }
+
+  .search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    color: white;
+    outline: none;
+    transition: 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
+
+  /* Grid Layout */
+  .plugin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .plugin-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .plugin-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+  }
+
+  .plugin-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: var(--bg-primary);
+    margin-bottom: 1rem;
+  }
+
+  .plugin-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
+  .plugin-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; flex-grow: 1; margin-bottom: 1.5rem; }
+
+  .plugin-footer { display: flex; gap: 0.5rem; }
+
+  /* Buttons */
+  .btn {
+    padding: 0.6rem 1rem;
+    border-radius: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .btn-install { background: var(--primary-color); color: white; flex: 2; }
+  .btn-install:hover { background: var(--primary-hover); }
+  .btn-view { background: #334155; color: white; flex: 1; }
+
+  /* Loading & Modal */
+  #loading { text-align: center; padding: 2rem; color: var(--text-secondary); grid-column: 1/-1; }
+  
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+  }
+  .modal-box { background: var(--bg-secondary); padding: 2rem; border-radius: 1rem; width: 400px; text-align: center; }
+  .progress-bar { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; margin: 1rem 0; }
+  .progress-fill { height: 100%; background: var(--primary-color); width: 0%; transition: 0.3s; }
+</style>
+
+<main class="plugin-manager-container">
+  <%- include('../components/instance') %>
+
+  <div class="plugin-header">
+    <h2 class="plugin-title">Plugin Store</h2>
+    <div class="search-wrapper">
+      <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm plugin...">
+    </div>
+  </div>
+
+  <div id="pluginGrid" class="plugin-grid">
+    </div>
+
+  <div id="loading">Đang tải danh sách plugin...</div>
+
+  <div class="pagination" style="text-align: center; margin-top: 3rem;">
+    <button id="loadMore" class="btn btn-view" style="padding: 1rem 2rem;">Xem thêm</button>
+  </div>
+</main>
+
+<div id="installModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="modalTitle">Đang cài đặt...</h3>
+    <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+    <p id="statusText" style="color: var(--text-secondary)">Vui lòng chờ...</p>
+  </div>
+</div>
+
+<script>
+  const INSTANCE_ID = "<%= req.params.id %>"; // Lấy ID từ URL của server bạn
+  let currentPage = 1;
+  const pluginGrid = document.getElementById('pluginGrid');
+  const loading = document.getElementById('loading');
+  const loadMoreBtn = document.getElementById('loadMore');
+
+  // Lấy dữ liệu từ Spiget API
+  async function loadPlugins(page = 1) {
+    loading.style.display = 'block';
+    try {
+      const res = await fetch(`https://api.spiget.org/v2/resources/free?size=12&page=${page}&sort=-downloads`);
+      const data = await res.json();
+      
+      data.forEach(plugin => {
+        const card = document.createElement('div');
+        card.className = 'plugin-card';
+        card.innerHTML = `
+          <img src="${plugin.icon.url ? 'https://www.spigotmc.org/' + plugin.icon.url : 'https://via.placeholder.com/56'}" class="plugin-icon">
+          <div class="plugin-name">${plugin.name}</div>
+          <div class="plugin-desc">${plugin.tagline || 'Không có mô tả cho plugin này.'}</div>
+          <div class="plugin-footer">
+            <button class="btn btn-install" onclick="install('${plugin.id}', '${plugin.name}')">Cài đặt</button>
+            <a href="https://www.spigotmc.org/resources/${plugin.id}" target="_blank" class="btn btn-view">Chi tiết</a>
+          </div>
+        `;
+        pluginGrid.appendChild(card);
+      });
+      currentPage++;
+    } catch (err) {
+      console.error("Lỗi tải plugin:", err);
+    } finally {
+      loading.style.display = 'none';
+    }
+  }
+
+  // Hàm xử lý cài đặt
+  async function install(pluginId, name) {
+    const modal = document.getElementById('installModal');
+    const fill = document.getElementById('progressFill');
+    const status = document.getElementById('statusText');
+    
+    modal.style.display = 'flex';
+    fill.style.width = '30%';
+    status.innerText = `Đang tải ${name} về hệ thống...`;
+
+    try {
+      // Gửi yêu cầu đến backend của bạn để thực hiện lệnh download về server
+      const response = await fetch(`/instance/${INSTANCE_ID}/plugins/install`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pluginId, pluginName: name })
+      });
+
+      fill.style.width = '70%';
+      status.innerText = 'Đang giải nén và cấu hình...';
+
+      if (response.ok) {
+        fill.style.width = '100%';
+        status.innerText = 'Cài đặt thành công!';
+        setTimeout(() => modal.style.display = 'none', 1500);
+      } else {
+        throw new Error('Hệ thống từ chối cài đặt');
+      }
+    } catch (err) {
+      status.innerText = 'Lỗi: ' + err.message;
+      status.style.color = 'var(--error-color)';
+      setTimeout(() => modal.style.display = 'none', 3000);
+    }
+  }
+
+  // Khởi tạo
+  loadPlugins();
+  loadMoreBtn.addEventListener('click', () => loadPlugins(currentPage));
+
+  // Search logic (Client side lọc nhanh)
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('.plugin-card').forEach(card => {
+      const name = card.querySelector('.plugin-name').innerText.toLowerCase();
+      card.style.display = name.includes(term) ? 'flex' : 'none';
+    });
+  });
+</script>
+
+<%- include('../components/footer') %>

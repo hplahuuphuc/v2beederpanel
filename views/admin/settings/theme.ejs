@@ -1,0 +1,210 @@
+<%- include('../../components/template') %>
+
+<main id="content" class="pb-10 bg-black min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-transparent pt-8 pb-6 border-b border-amber-900/20">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-500 to-amber-200 sm:truncate">
+            <%= req.translations.settings || 'Cài Đặt Giao Diện' %>
+          </h1>
+          <p class="mt-2 text-sm text-amber-600/60 max-w-2xl italic">
+            <%= req.translations.changeSettings || 'Tùy biến diện mạo và phong cách độc bản cho Panel của bạn.' %>
+          </p>
+        </div>
+        <div class="mt-4 sm:mt-0 sm:ml-4">
+          <button type="button" class="inline-flex items-center px-4 py-2 rounded-xl bg-neutral-900 border border-amber-900/50 text-amber-500 text-sm font-medium shadow-sm transition-all hover:bg-amber-950/30 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Khôi phục mặc định
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <%- include('../../components/settings') %>
+
+    <div class="bg-neutral-900/50 rounded-2xl shadow-2xl border border-amber-900/30 overflow-hidden mt-8 backdrop-blur-sm">
+      <div class="px-6 py-5 border-b border-amber-900/30 flex items-center justify-between bg-gradient-to-r from-amber-950/20 to-transparent">
+        <h2 class="text-lg font-bold text-amber-200 flex items-center">
+          <svg class="inline-block mr-2 h-5 w-5 text-amber-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+          </svg>
+          Tùy Chỉnh Giao Diện
+        </h2>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest bg-amber-900/40 text-amber-400 border border-amber-500/30 uppercase">
+          Chế độ xem trước
+        </span>
+      </div>
+      
+      <div class="px-6 py-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-amber-100 uppercase tracking-tight">Kiểu dáng Nút bấm</h3>
+            <p class="text-xs text-neutral-500 mt-1">Chọn tông màu chủ đạo cho các nút chức năng</p>
+          </div>
+          
+          <form action="/admin/settings/change/theme/button-color" method="POST" class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <label class="relative block cursor-pointer group">
+                <input type="radio" name="buttoncolor" value="bg-gradient-to-b from-amber-400 to-amber-600 text-black font-bold" class="peer sr-only" <%= theme['button-color'].includes('amber') ? 'checked' : '' %>>
+                <div class="rounded-xl bg-gradient-to-b from-amber-300 to-amber-600 p-3 text-center text-xs font-bold text-black peer-checked:ring-2 peer-checked:ring-amber-400 peer-checked:ring-offset-2 peer-checked:ring-offset-black transition-all group-hover:scale-105 shadow-[0_0_10px_rgba(251,191,36,0.2)]">
+                  Vàng Ánh Kim
+                </div>
+              </label>
+
+              <label class="relative block cursor-pointer group">
+                <input type="radio" name="buttoncolor" value="bg-white hover:bg-neutral-300 text-neutral-800" class="peer sr-only" <%= theme['button-color'].includes('white') ? 'checked' : '' %>>
+                <div class="rounded-xl bg-white text-neutral-800 p-3 text-center text-xs font-bold peer-checked:ring-2 peer-checked:ring-amber-500 peer-checked:ring-offset-2 peer-checked:ring-offset-black transition-all group-hover:scale-105">
+                  Trắng Sạch
+                </div>
+              </label>
+              
+              <label class="relative block cursor-pointer group">
+                <input type="radio" name="buttoncolor" value="bg-blue-600 hover:bg-blue-700 text-white" class="peer sr-only" <%= theme['button-color'].includes('blue') ? 'checked' : '' %>>
+                <div class="rounded-xl bg-blue-600 text-white p-3 text-center text-xs font-bold peer-checked:ring-2 peer-checked:ring-amber-500 peer-checked:ring-offset-2 peer-checked:ring-offset-black transition-all group-hover:scale-105">
+                  Xanh Dương
+                </div>
+              </label>
+            </div>
+            
+            <button type="submit" class="w-full rounded-xl bg-neutral-800 border border-amber-900/50 py-2.5 text-xs font-bold text-amber-500 hover:bg-amber-900/20 transition-all uppercase tracking-widest active:scale-95">
+              Lưu kiểu nút
+            </button>
+          </form>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-amber-100 uppercase tracking-tight">Màu Nền Panel</h3>
+            <p class="text-xs text-neutral-500 mt-1">Lựa chọn không gian làm việc của bạn</p>
+          </div>
+          
+          <form action="/admin/settings/change/theme/paneltheme-color" method="POST" class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <label class="relative block cursor-pointer group">
+                <input type="radio" name="paneltheme" value="bg-black border-amber-900/40" class="peer sr-only" <%= theme['paneltheme-color'].includes('black') ? 'checked' : '' %>>
+                <div class="rounded-xl bg-black border border-amber-900/40 h-16 flex flex-col items-center justify-center peer-checked:ring-2 peer-checked:ring-amber-500 transition-all shadow-[inset_0_0_10px_rgba(180,130,50,0.1)]">
+                  <span class="text-[10px] text-amber-500 font-bold uppercase tracking-tighter">Gold Luxury</span>
+                </div>
+              </label>
+              
+              <label class="relative block cursor-pointer">
+                <input type="radio" name="paneltheme" value="bg-[#1f1e1e]" class="peer sr-only" <%= theme['paneltheme-color'] == 'bg-[#1f1e1e]' ? 'checked' : '' %>>
+                <div class="rounded-xl bg-[#1f1e1e] h-16 flex items-center justify-center peer-checked:ring-2 peer-checked:ring-amber-500 transition-all">
+                  <span class="text-xs text-white">Tối Cơ Bản</span>
+                </div>
+              </label>
+              
+              <label class="relative block cursor-pointer">
+                <input type="radio" name="paneltheme" value="bg-sky-950" class="peer sr-only" <%= theme['paneltheme-color'] == 'bg-sky-950' ? 'checked' : '' %>>
+                <div class="rounded-xl bg-sky-950 h-16 flex items-center justify-center peer-checked:ring-2 peer-checked:ring-amber-500 transition-all">
+                  <span class="text-xs text-white">Xanh Thẳm</span>
+                </div>
+              </label>
+
+              <label class="relative block cursor-pointer">
+                <input type="radio" name="paneltheme" value="bg-[#33404d]" class="peer sr-only" <%= theme['paneltheme-color'] == 'bg-[#33404d]' ? 'checked' : '' %>>
+                <div class="rounded-xl bg-[#33404d] h-16 flex items-center justify-center peer-checked:ring-2 peer-checked:ring-amber-500 transition-all">
+                  <span class="text-xs text-white">Cổ Điển</span>
+                </div>
+              </label>
+            </div>
+            
+            <button type="submit" class="w-full rounded-xl bg-neutral-800 border border-amber-900/50 py-2.5 text-xs font-bold text-amber-500 hover:bg-amber-900/20 transition-all uppercase tracking-widest active:scale-95">
+              Lưu màu nền
+            </button>
+          </form>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-sm font-bold text-amber-100 uppercase tracking-tight">Bản quyền Footer</h3>
+            <p class="text-xs text-neutral-500 mt-1">Hiển thị thông tin thương hiệu ở cuối trang</p>
+          </div>
+          
+          <form action="/admin/settings/toggle/theme/footer" method="POST" class="space-y-4">
+            <div class="flex items-center justify-between rounded-xl bg-black/40 border border-amber-900/20 p-5">
+              <span class="text-sm font-medium text-amber-100/70">Skyport Credits</span>
+              <% if (settings.footer === true) { %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-900/40 text-amber-400 border border-amber-500/30">
+                  ĐANG BẬT
+                </span>
+              <% } else { %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-neutral-800 text-neutral-500 border border-neutral-700">
+                  ĐÃ TẮT
+                </span>
+              <% } %>
+            </div>
+            
+            <div class="flex space-x-3">
+              <button type="submit" name="action" value="<%= settings.footer ? 'disable' : 'enable' %>" 
+                class="flex-1 rounded-xl py-2.5 text-xs font-extrabold transition-all uppercase tracking-widest active:scale-95 shadow-lg
+                <%= settings.footer ? 'bg-red-950/20 border border-red-900/50 text-red-500 hover:bg-red-900/40' : 'bg-amber-950/20 border border-amber-900/50 text-amber-500 hover:bg-amber-900/40' %>">
+                <%= settings.footer ? 'Tắt bản quyền' : 'Bật bản quyền' %>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 bg-neutral-900/50 rounded-2xl shadow-2xl border border-amber-900/30 overflow-hidden backdrop-blur-sm">
+      <div class="px-6 py-5 border-b border-amber-900/30 bg-gradient-to-r from-neutral-800/40 to-transparent">
+        <h2 class="text-lg font-bold text-amber-200 flex items-center gap-2">
+          <svg class="h-5 w-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+          Xem Trước Giao Diện Thực Tế
+        </h2>
+      </div>
+      <div class="p-8">
+        <div class="<%= theme['paneltheme-color'] %> rounded-2xl p-8 border border-amber-900/20 relative overflow-hidden transition-all duration-500 shadow-[0_0_40px_rgba(0,0,0,0.7)]">
+          <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+          
+          <div class="flex items-center justify-between relative z-10">
+            <h3 class="text-xl font-bold text-white drop-shadow-md">Panel Mẫu</h3>
+            <button class="rounded-xl <%= theme['button-color'] %> px-5 py-2 text-sm font-bold shadow-xl transition-transform hover:scale-105">
+              Nút Bấm Mẫu
+            </button>
+          </div>
+          <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 relative z-10">
+            <div class="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10">
+              <h4 class="text-sm font-bold text-amber-400">Trạng Thái Máy Chủ</h4>
+              <p class="mt-1 text-xs text-neutral-400">Mọi hệ thống hoạt động ổn định.</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10">
+              <h4 class="text-sm font-bold text-amber-400">Hoạt Động Gần Đây</h4>
+              <p class="mt-1 text-xs text-neutral-400">Không có thông báo mới nào.</p>
+            </div>
+          </div>
+          <% if (settings.footer === true) { %>
+            <div class="mt-8 pt-4 border-t border-white/10 text-center text-[10px] text-neutral-500 uppercase tracking-widest relative z-10">
+              Cung cấp bởi Skyport Control Panel
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../../components/footer') %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Theme preview logic
+    const themeRadios = document.querySelectorAll('input[type="radio"]');
+    themeRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        const submitBtn = this.closest('form').querySelector('button[type="submit"]');
+        submitBtn.classList.remove('bg-neutral-800', 'text-amber-500');
+        submitBtn.classList.add('bg-amber-600', 'text-black', 'scale-105');
+        
+        // Hiệu ứng "Lấp lánh" khi chọn Gold theme
+        if(this.value.includes('amber') || this.value.includes('black')) {
+            console.log("Gold theme selected");
+        }
+      });
+    });
+  });
+</script>

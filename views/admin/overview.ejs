@@ -1,0 +1,328 @@
+<%- include('../components/admin_template') %>
+
+<main id="content" class="bg-[#0c0a09] min-h-screen text-stone-200 selection:bg-amber-500/30">
+  <% if (showWelcome) { %>
+    <div class="popup-overlay active" id="welcomeOverlay"></div>
+    <div class="welcome-popup active gold-shimmer-bg" id="welcomePopup">
+      <div class="absolute top-0 right-0 m-4">
+        <button class="close-popup-btn" id="closeWelcome">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="text-center">
+        <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center bg-amber-500/10 rounded-2xl backdrop-blur-md border border-amber-500/40 rotate-3 hover:rotate-0 transition-transform duration-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+          </svg>
+        </div>
+        <h2 class="text-4xl font-black mb-3 text-gold-metallic">TeryxPanel</h2>
+        <p class="text-amber-100/60 mb-8 font-medium italic">"The Golden Standard of Game Hosting Management"</p>
+        <button class="welcome-btn gold-shimmer" id="getStartedBtn">
+          Bắt đầu ngay
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-12 border-b border-amber-900/30 pb-8">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Hệ thống <span class="text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">Tổng quan</span></h1>
+        <p class="mt-2 text-stone-500 font-medium tracking-wide uppercase text-xs">Phân tích tài nguyên máy chủ thời gian thực</p>
+      </div>
+      <div class="flex gap-3 w-full md:w-auto">
+        <a href="../account/debug" class="btn-outline-gold">
+          Dữ liệu Tài khoản
+        </a>
+        <a href="../nodes/debug" class="btn-outline-gold">
+          Dữ liệu Node
+        </a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <% const stats = [
+        { label: 'Người dùng', value: usersTotal, icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', color: 'amber' },
+        { label: 'Máy chủ con', value: instancesTotal, icon: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', color: 'yellow' },
+        { label: 'Nodes', value: nodesTotal, icon: 'M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01', color: 'orange' },
+        { label: 'Images', value: imagesTotal, icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'amber' }
+      ] %>
+
+      <% stats.forEach(stat => { %>
+        <div class="stat-card gold-shimmer">
+          <div class="flex items-center justify-between relative z-10">
+            <div>
+              <p class="text-[10px] font-bold text-amber-500/60 uppercase tracking-[0.2em] mb-1"><%= stat.label %></p>
+              <p class="text-3xl font-black text-white"><%= stat.value %></p>
+            </div>
+            <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-transparent border border-amber-500/20 text-amber-400 group-hover:scale-110 transition-transform duration-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= stat.icon %>" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <div class="bg-stone-900/40 backdrop-blur-md rounded-2xl p-8 border border-amber-900/30 mb-12 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[80px] rounded-full -mr-32 -mt-32"></div>
+      <div class="relative">
+        <img src="https://cdn.phototourl.com/uploads/2026-02-18-be75bcb7-03b5-4154-ac14-069d71facc67.png" class="h-24 w-24 rounded-2xl shadow-[0_0_30px_rgba(251,191,36,0.2)] border-2 border-amber-500/30 rotate-3 hover:rotate-0 transition-all duration-500" alt="Logo">
+        <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 border-4 border-[#0c0a09] rounded-full shadow-lg"></div>
+      </div>
+      <div class="flex-grow text-center md:text-left relative">
+        <h3 class="text-xl font-bold text-white mb-2 tracking-tight">Beeder Engine Core</h3>
+        <p class="text-stone-400 text-sm leading-relaxed">
+          Đang vận hành trên phiên bản <span id="currentVersion" class="font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded"></span>.
+          <span id="versionStatus" class="block mt-4"></span>
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <a href="http://dsc.gg/beedercloud" class="link-card bg-stone-900 border-amber-900/40 hover:border-amber-500/60 group">
+        <div class="flex flex-col items-center text-center">
+          <div class="p-4 rounded-2xl bg-amber-500/5 mb-4 border border-amber-500/10 group-hover:border-amber-500/40 transition-all duration-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.069.069 0 0 0-.032.027C.533 9.048-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.196.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.947 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-white tracking-tight">Discord Support</h3>
+          <p class="text-[10px] uppercase tracking-widest text-stone-500 mt-2">Hỗ trợ đặc quyền 24/7</p>
+        </div>
+      </a>
+
+      <a href="#" class="link-card bg-stone-900 border-amber-900/40 hover:border-yellow-500/60 group">
+        <div class="flex flex-col items-center text-center">
+          <div class="p-4 rounded-2xl bg-yellow-500/5 mb-4 border border-yellow-500/10 group-hover:border-yellow-500/40 transition-all duration-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-.85 0-1.673.118-2.454.339A.75.75 0 002 4.06v11a.75.75 0 00.954.721A7.506 7.506 0 015 15.5c1.579 0 3.042.487 4.25 1.32V4.065z" />
+            </svg>
+          </div>
+          <h3 class="font-bold text-white tracking-tight">Documentation</h3>
+          <p class="text-[10px] uppercase tracking-widest text-stone-500 mt-2">Hướng dẫn chi tiết</p>
+        </div>
+      </a>
+
+      <a href="https://github.com/mrbeeder" class="link-card bg-stone-900 border-amber-900/40 hover:border-white/20 group">
+        <div class="flex flex-col items-center text-center">
+          <div class="p-4 rounded-2xl bg-white/5 mb-4 border border-white/5 group-hover:border-white/20 transition-all duration-500">
+            <svg class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </div>
+          <h3 class="font-bold text-white tracking-tight">Open Source</h3>
+          <p class="text-[10px] uppercase tracking-widest text-stone-500 mt-2">GitHub Repository</p>
+        </div>
+      </a>
+
+      <a href="#" class="link-card bg-gradient-to-br from-amber-600 to-amber-800 border-none shadow-[0_10px_30px_rgba(217,119,6,0.2)] group overflow-hidden">
+        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="flex flex-col items-center text-center relative z-10">
+          <div class="p-4 rounded-2xl bg-white/20 mb-4 group-hover:rotate-12 transition-transform duration-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+            </svg>
+          </div>
+          <h3 class="font-bold text-white tracking-tight">Donate System</h3>
+          <p class="text-[10px] uppercase tracking-widest text-white/70 mt-2">Duy trì cộng đồng</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const myCurrentVersion = '<%= version %>';
+    const myLatestVersion = '<%= version %>'; // Thường sẽ lấy từ API
+    
+    const versionSpan = document.getElementById('currentVersion');
+    const versionStatusSpan = document.getElementById('versionStatus');
+    versionSpan.textContent = myCurrentVersion;
+
+    if (myCurrentVersion === myLatestVersion) {
+      versionStatusSpan.innerHTML = `
+        <span class="inline-flex items-center px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(16,185,129,1)]"></span>
+          System Optimized
+        </span>
+      `;
+    } else {
+      versionStatusSpan.innerHTML = `
+        <span class="inline-flex items-center px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+          <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-2 animate-bounce"></span>
+          Update Available: ${myLatestVersion} • <a href="#" class="ml-1 underline">Download</a>
+        </span>
+      `;
+    }
+
+    const welcomePopup = document.getElementById('welcomePopup');
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+
+    function closePopup() {
+      if (welcomePopup) {
+        welcomePopup.style.transform = 'translate(-50%, -50%) scale(0.95) rotate(-2deg)';
+        welcomePopup.style.opacity = '0';
+        welcomeOverlay.style.opacity = '0';
+        setTimeout(() => {
+          welcomePopup.remove();
+          welcomeOverlay.remove();
+        }, 300);
+      }
+    }
+
+    if (welcomePopup) {
+      setTimeout(() => {
+        confetti({
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#fbbf24', '#f59e0b', '#d97706', '#ffffff', '#78350f']
+        });
+      }, 500);
+
+      document.getElementById('closeWelcome').onclick = closePopup;
+      document.getElementById('getStartedBtn').onclick = closePopup;
+      welcomeOverlay.onclick = closePopup;
+    }
+  });
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+  body { font-family: 'Space Grotesk', sans-serif; }
+
+  /* Hiệu ứng Vàng Ánh Kim (Metallic Gold) */
+  .text-gold-metallic {
+    background: linear-gradient(
+      to bottom,
+      #fde68a 0%,
+      #f59e0b 25%,
+      #b45309 50%,
+      #f59e0b 75%,
+      #fde68a 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    font-weight: 900;
+  }
+
+  /* Shimmer Effect cho Card và Button */
+  .gold-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .gold-shimmer::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 0%,
+      rgba(251, 191, 36, 0.05) 45%,
+      rgba(251, 191, 36, 0.2) 50%,
+      rgba(251, 191, 36, 0.05) 55%,
+      transparent 100%
+    );
+    transform: rotate(45deg);
+    animation: shimmer 4s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+  }
+
+  /* Components Style */
+  .popup-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(12px);
+    z-index: 1000; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .welcome-popup {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1);
+    background: radial-gradient(circle at top left, #1c1917, #0c0a09);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    color: white; padding: 4rem 3rem; border-radius: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 60px rgba(180, 83, 9, 0.1);
+    max-width: 32rem; width: 90%; z-index: 1001; transition: all 0.5s ease;
+  }
+
+  .stat-card {
+    background: rgba(28, 25, 23, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(120, 53, 15, 0.3);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(251, 191, 36, 0.4);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+  }
+
+  .link-card {
+    padding: 2rem;
+    border-radius: 1.5rem;
+    border-width: 1px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .link-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+  }
+
+  .btn-outline-gold {
+    display: inline-flex; align-items: center;
+    padding: 0.6rem 1.25rem;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 0.75rem;
+    background: rgba(251, 191, 36, 0.03);
+    color: #fde68a; font-size: 0.875rem; font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .btn-outline-gold:hover {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.5);
+    transform: scale(1.05);
+  }
+
+  .welcome-btn {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: #451a03; font-weight: 800; padding: 1rem 2.5rem;
+    border-radius: 1rem; transition: all 0.3s ease;
+    box-shadow: 0 10px 20px -5px rgba(217, 119, 6, 0.4);
+    display: inline-flex; align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .welcome-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px -5px rgba(217, 119, 6, 0.6);
+  }
+
+  .close-popup-btn {
+    background: rgba(255, 255, 255, 0.03); color: #78716c;
+    border-radius: 1rem; width: 3rem; height: 3rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease; border: 1px solid transparent;
+  }
+  .close-popup-btn:hover {
+    background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2);
+  }
+</style>
